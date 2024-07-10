@@ -11,34 +11,37 @@ public class Calculadora {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		String operacao = sc.nextLine(); 
-		float num1 = sc.nextFloat();
-		float num2 = sc.nextFloat();
 		float result;
-		switch (operacao) {
-		case ("+"):
-			result = num1 + num2;
-			System.out.println("RESULTADO: " + result);
-			break;
-		case ("-"):
-			result = num1 - num2;
-			System.out.println("RESULTADO: " + result);
-			break;
-		case ("*"):
-			result = num1 * num2;
-			System.out.println("RESULTADO: " + result);
-			break;
-		case ("/"):
-			if (num2 == 0) {
-				System.out.println("ERRO");
+		
+		if (operacao.equals("+") || operacao.equals("-") || operacao.equals("/") || operacao.equals("*")){
+			float num1 = sc.nextFloat();
+			float num2 = sc.nextFloat();
+		
+			switch (operacao) {
+			case ("+"):
+				result = num1 + num2;
+				System.out.println("RESULTADO: " + result);
 				break;
-			}
-			
-			result = num1 / num2;
-			System.out.println("RESULTADO: " + result);
-			break;
-		default: 
+			case ("-"):
+				result = num1 - num2;
+				System.out.println("RESULTADO: " + result);
+				break;
+			case ("*"):
+				result = num1 * num2;
+				System.out.println("RESULTADO: " + result);
+				break;
+			case ("/"):
+				if (num2 == 0) {
+					System.out.println("ERRO");
+					break;
+				}
+				result = num1 / num2;
+				System.out.println("RESULTADO: " + result);
+				break;
+			} 
+		
+		} else { 
 			System.out.println("ENTRADA INVALIDA");
-			break;
 		}
 		
 		
