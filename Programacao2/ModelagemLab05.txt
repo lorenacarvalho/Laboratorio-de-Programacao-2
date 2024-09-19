@@ -1,0 +1,232 @@
+// diagrama de classes de exemplo 
+// duas barras definem comentários 
+ 
+FacadeComplementAcao 
+composes UsuarioController, DicasController 
+--- 
+--- 
++ criarEstudante(nome: String, cpf: String, senha: String, matricula: String):boolean 
++ alterarSenhaEstudante(cpf:String, senhaAntiga: String, novaSenha: String): boolean 
++ exibirEstudantes():String[] 
++ listarEstudantesRankingDicas():String[] 
+ 
++ adicionaDica(autor: Usuario, tema: String):boolean 
++ listarDicas():String[] 
++ listarDicasDetalhes():String[] 
++ listarDica(posicao: int): String 
++ listarDicaDetalhes(posicao:int):String 
++ adicionaElementoTextoDica(cpf:String, senha:String, posicao:int, texto:String): boolean 
++ adicionaElementoMultimidiaDica(posicao: int, link: String, cabecalho:String, tempo:int):boolean 
++ adicionaElementoReferencia(posicao: int, referencias:List<String>, conferida:boolean): boolean 
+--- 
+ 
+ 
+ 
+ 
+UsuarioController  
+composes Usuario 
+--- 
+- usuarios: HashMap<String,Usuario> 
+--- 
++ adicionaEstudante(nome: String, cpf: String, senha: String, matricula: String):boolean 
++ alterarSenhaEstudante(cpf:String, senhaAntiga: String, novaSenha: String): boolean 
++ exibirEstudantes():String[] 
++ validaSenha(cpf:String, senha:String):boolean
++ getUsuario(cpf:String): Usuario 
++ verificaRankingEstudantes():String[] 
+--- 
+ 
+ 
+ 
+ 
+ 
+Usuario
+composes AtividadeComplementar
+--- 
+- nome: String 
+- cpf: String 
+- senha: String 
+- matricula: String 
+- bonificacaoDicasFornecidas: int 
+- atividadesComplementares: List<AtividasdesComplementares>
+--- 
++ Usuario(nome: String, cpf: String, senha: String, matricula: String) 
++ getNome(): String 
++ setSenha(senhaAntiga: String, novaSenha: String): boolean 
++ verificaSenha(senha: String): boolean 
++ adicionaBonusElementos(bonusDoElemento:int): void 
++ toString(): String 
++ hashCode(): int 
++ equals(obj: Object): boolean 
+--- 
+ 
+ 
+ 
+ 
+ 
+DicasController 
+composes Dica 
+--- 
+- dicasDisponiveis: List<Dica> 
+--- 
++ adicionaDica(autor: Usuario, tema: String):boolean 
++ listarDicas():String[] 
++ listarDicasDetalhes():String[] 
++ listarDica(posicao: int): String 
++ listarDicaDetalhes(posicao:int):String 
++ adicionaElementoTextoDica(estudante:Usuario, senha:String,posicao:int, texto:String): boolean 
++ adicionaElementoMultimidiaDica(estudante:Usuario, posicao: int, link: String, cabecalho:String, tempo:int):boolean 
++ adicionaElementoReferencia(estudante:Usuario, posicao: int, referencias:List<String>, conferida:boolean): boolean 
+--- 
+ 
+ 
+ 
+Dica 
+composes ElementoInterface 
+--- 
+- autor: Usuario 
+- tema: String //pode ser que mude para um tipo Tema. 
+- elementos: List<ElementoInterface> 
+--- 
++ Dica(autor: Usuario, tema: String) 
++ toString():String 
++ adicionaElementoTexto(estudante:Usuario, texto:String): boolean 
++ adicionaElementoMultimidia(estudante:Usuario, link: String, cabecalho:String, tempo:int):boolean 
++ adicionaElementoReferencia(estudante:Usuario, referencias :List<String>, conferida:boolean): boolean 
++ exibeDetalhes():String
++ toString():String
+- adicionaBonusAutor(qtdPontos:int):void
+ 
+--- 
+ 
+ 
+ 
+ 
+ElementoInterface 
+--- 
+--- 
+- calculaValor(): int 
++ exibePadrao(): void 
++ exibeDetalhado(): void 
+--- 
+ 
+ 
+ 
+Texto 
+implements ElementoInterface 
+--- 
+- texto: String 
+- valor: int 
+--- 
++ Texto(texto:String)
++ exibeDetalhado(): void 
+- calculaValor(): int 
++ toString(): String 
+--- 
+ 
+ 
+ 
+ 
+Multimidia 
+implements ElementoInterface 
+--- 
+- cabecalho: String 
+- link: String 
+- valor: int 
+--- 
++ Multimidia(cabecalho:String, link:String)
++ exibeDetalhado(): void 
+- calculaValor(): int 
++ toString(): String 
+--- 
+ 
+ 
+ 
+ 
+Referencia 
+implements ElementoInterface 
+--- 
+- titulo: String 
+- fonte: String 
+- ano: int 
+- flagDeAcesso: boolean 
+- ordemDeImportancia: int 
+--- 
++ Referencia(referencias: List<String>, flagDeAcesso: boolean)
++ exibeDetalhado(): void 
+- calculaValor(): int 
++ toString(): String 
+---
+
+
+
+
+
+AtividadeComplementar
+---
+- tipo:String
+- descricao:String
+- codigo:String
+- linkDocumentacao:String
+- unidadeContagem: int
+- qtdMaximaCreditos:int
+---
++ AtividadeComplementar(tipo:String, descricao:String, codigo:String, linkDocumentacao:String)
++ alteraDescricao(novaDescricao:String): boolean
++ alteraDocumentacao(novoLinkDocumentacao: String): boolean
++ calculaCreditos():int
+---
+
+PesquisaExtensao
+extends AtividadeComplementar
+---
+- subTipo:String
+---
++ PesquisaExtensao(tipo:String, descricao:String, codigo:String, linkDocumentacao:String, subTipo:String)
++ toString():Stirng
+---
+
+
+
+Monitoria
+extends AtividadeComplementar
+---
+- disciplinaMonitorada:String
+---
++ Monitoria(tipo:String, descricao:String, codigo:String, linkDocumentacao:String,disciplinaMonitorada:String)
++ toString():Stirng
+---
+
+
+
+
+Estagio
+extends AtividadeComplementar
+---
+- nomeDaEmpresa:String
+---
++ Estagio(tipo:String, descricao:String, codigo:String,linkDocumentacao:String,nomeDaEmpresa:String)
++ toString():Stirng
+---
+
+
+RepresentacaoEstudantil
+extends AtividadeComplementar
+---
+- subTipoCargo:String
+---
++ RepresentacaoEstudantil(tipo:String, descricao:String, codigo:String, linkDocumentacao:String,subTipoCargo:String)
++ toString():String
+---
+
+
+
+
+
+
+
+
+
+
+
+
