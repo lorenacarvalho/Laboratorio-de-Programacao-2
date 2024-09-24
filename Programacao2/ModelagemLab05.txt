@@ -17,7 +17,17 @@ composes UsuarioController, DicasController
 + listarDicaDetalhes(posicao:int):String 
 + adicionaElementoTextoDica(cpf:String, senha:String, posicao:int, texto:String): boolean 
 + adicionaElementoMultimidiaDica(posicao: int, link: String, cabecalho:String, tempo:int):boolean 
-+ adicionaElementoReferencia(posicao: int, referencias:List<String>, conferida:boolean): boolean 
++ adicionaElementoReferencia(cpf:String, senha:String, posicao: int, titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int): boolean 
+
+
++ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, unidadeDeTempo:int, disciplina:String):String
++ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, unidadeDeTempo:int, subTipo:String):String
++ criarAtividadeEstagioEstudante(cpf:String, senha:String, unidadeDeTempo:int, nomeEmpresa:String):String
++ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, unidadeDeTempo:int, subTipoCargo:String):String
++ verificarMetaAlcancada(cpf:String, senha:String):boolean
++ gerarMapaCreditosAtividades(cpf:String, senha:String):String
++ creditosAcumuladosAtividade(cpf: Strng, senha:String): int
+
 --- 
  
  
@@ -34,6 +44,8 @@ composes Usuario
 + validaSenha(cpf:String, senha:String):boolean
 + getUsuario(cpf:String): Usuario 
 + verificaRankingEstudantes():String[] 
++ verificarMetaAlcancada(cpf:String, senha:String):boolean
++ gerarMapaCreditosAtividades():String
 --- 
  
  
@@ -41,7 +53,7 @@ composes Usuario
  
  
 Usuario
-composes AtividadeComplementar
+composes AtividadeComplementarAbstract
 --- 
 - nome: String 
 - cpf: String 
@@ -54,7 +66,8 @@ composes AtividadeComplementar
 + getNome(): String 
 + setSenha(senhaAntiga: String, novaSenha: String): boolean 
 + verificaSenha(senha: String): boolean 
-+ adicionaBonusElementos(bonusDoElemento:int): void 
++ adicionaBonusElementos(bonusDoElemento:int): void
++ verificarMetaAlcancada():boolean
 + toString(): String 
 + hashCode(): int 
 + equals(obj: Object): boolean 
@@ -76,7 +89,7 @@ composes Dica
 + listarDicaDetalhes(posicao:int):String 
 + adicionaElementoTextoDica(estudante:Usuario, senha:String,posicao:int, texto:String): boolean 
 + adicionaElementoMultimidiaDica(estudante:Usuario, posicao: int, link: String, cabecalho:String, tempo:int):boolean 
-+ adicionaElementoReferencia(estudante:Usuario, posicao: int, referencias:List<String>, conferida:boolean): boolean 
++ adicionaElementoReferencia(estudante:Usuario, posicao: int, titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int): boolean 
 --- 
  
  
@@ -92,7 +105,7 @@ composes ElementoInterface
 + toString():String 
 + adicionaElementoTexto(estudante:Usuario, texto:String): boolean 
 + adicionaElementoMultimidia(estudante:Usuario, link: String, cabecalho:String, tempo:int):boolean 
-+ adicionaElementoReferencia(estudante:Usuario, referencias :List<String>, conferida:boolean): boolean 
++ adicionaElementoReferencia(estudante:Usuario, titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int, conferida:boolean): boolean 
 + exibeDetalhes():String
 + toString():String
 - adicionaBonusAutor(qtdPontos:int):void
@@ -148,7 +161,7 @@ implements ElementoInterface
 --- 
 - titulo: String 
 - fonte: String 
-- ano: int 
+- anoPublicacao: int 
 - flagDeAcesso: boolean 
 - ordemDeImportancia: int 
 --- 
@@ -162,71 +175,69 @@ implements ElementoInterface
 
 
 
-AtividadeComplementar
+AtividadeComplementarAbstract
 ---
-- tipo:String
 - descricao:String
 - codigo:String
 - linkDocumentacao:String
-- unidadeContagem: int
+- unidadeTempo: int
 - qtdMaximaCreditos:int
+- creditosPorUnidade: int
 ---
 + AtividadeComplementar(tipo:String, descricao:String, codigo:String, linkDocumentacao:String)
 + alteraDescricao(novaDescricao:String): boolean
 + alteraDocumentacao(novoLinkDocumentacao: String): boolean
 + calculaCreditos():int
++ getQtdMaximaCreditosAbstract():int
++ getCreditosPorUnidade():int
 ---
 
 PesquisaExtensao
-extends AtividadeComplementar
+extends AtividadeComplementarAbstract
 ---
 - subTipo:String
 ---
 + PesquisaExtensao(tipo:String, descricao:String, codigo:String, linkDocumentacao:String, subTipo:String)
++ getQtdMaximaCreditos():int
++ getCreditosPorUnidade():int
 + toString():Stirng
 ---
 
 
 
 Monitoria
-extends AtividadeComplementar
+extends AtividadeComplementarAbstract
 ---
 - disciplinaMonitorada:String
 ---
 + Monitoria(tipo:String, descricao:String, codigo:String, linkDocumentacao:String,disciplinaMonitorada:String)
-+ toString():Stirng
----
-
-
-
-
-Estagio
-extends AtividadeComplementar
----
-- nomeDaEmpresa:String
----
-+ Estagio(tipo:String, descricao:String, codigo:String,linkDocumentacao:String,nomeDaEmpresa:String)
-+ toString():Stirng
----
-
-
-RepresentacaoEstudantil
-extends AtividadeComplementar
----
-- subTipoCargo:String
----
-+ RepresentacaoEstudantil(tipo:String, descricao:String, codigo:String, linkDocumentacao:String,subTipoCargo:String)
++ getQtdMaximaCreditos():int
++ getCreditosPorUnidade():int
 + toString():String
 ---
 
 
 
 
+Estagio
+extends AtividadeComplementarAbstract
+---
+- nomeDaEmpresa:String
+---
++ Estagio(tipo:String, descricao:String, codigo:String,linkDocumentacao:String,nomeDaEmpresa:String)
++ getQtdMaximaCreditos():int
++ getCreditosPorUnidade():int
++ toString():Stirng
+---
 
 
-
-
-
-
-
-
+RepresentacaoEstudantil
+extends AtividadeComplementarAbstract
+---
+- subTipoCargo:String
+---
++ RepresentacaoEstudantil(tipo:String, descricao:String, codigo:String, linkDocumentacao:String,subTipoCargo:String)
++ getQtdMaximaCreditos():int
++ getCreditosPorUnidade():int
++ toString():String
+---
