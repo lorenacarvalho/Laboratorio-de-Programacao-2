@@ -20,14 +20,15 @@ composes UsuarioController, DicasController
 + adicionaElementoReferencia(cpf:String, senha:String, posicao: int, titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int): boolean 
 
 
-+ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, unidadeDeTempo:int, disciplina:String):String
-+ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, unidadeDeTempo:int, subTipo:String):String
-+ criarAtividadeEstagioEstudante(cpf:String, senha:String, unidadeDeTempo:int, nomeEmpresa:String):String
-+ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, unidadeDeTempo:int, subTipoCargo:String):String
++ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, tempoContabilizado:int, disciplina:String):String
++ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, tempoContabilizado:int, subTipo:String):String
++ criarAtividadeEstagioEstudante(cpf:String, senha:String, tempoContabilizado:int, nomeEmpresa:String):String
++ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, tempoContabilizado:int, subTipoCargo:String):String
 + verificarMetaAlcancada(cpf:String, senha:String):boolean
 + gerarMapaCreditosAtividades(cpf:String, senha:String):String
-+ creditosAcumuladosAtividade(cpf: Strng, senha:String): int
-
++ creditosAcumuladosAtividade(cpf: String, senha:String, tipoAtividade:String): int
++ alterarDescricaoAtividade(cpf:String, senha:String, codigoAtividade:String, descricao:String):boolean
++ alterarComprovacaoAtividade(cpf:String, senha:String, codigoAtividade:String, linkComprovacao:String):boolean
 --- 
  
  
@@ -44,12 +45,14 @@ composes Usuario
 + validaSenha(cpf:String, senha:String):boolean
 + getUsuario(cpf:String): Usuario 
 + verificaRankingEstudantes():String[] 
-+ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, unidadeDeTempo:int, disciplina:String):String
-+ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, unidadeDeTempo:int, subTipo:String):String
-+ criarAtividadeEstagioEstudante(cpf:String, senha:String, unidadeDeTempo:int, nomeEmpresa:String):String
-+ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, unidadeDeTempo:int, subTipoCargo:String):String
++ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, tempoContabilizado:int, disciplina:String):String
++ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, tempoContabilizado:int, subTipo:String):String
++ criarAtividadeEstagioEstudante(cpf:String, senha:String, tempoContabilizado:int, nomeEmpresa:String):String
++ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, tempoContabilizado:int, subTipoCargo:String):String
 + verificarMetaAlcancadaCreditos(cpf:String, senha:String):boolean
-+ gerarMapaCreditosAtividades():String
++ gerarMapaCreditosAtividades(cpf:String, senha:String):String
++ alterarDescricaoAtividade(cpf:String, senha:String, codigoAtividade:String, descricao:String):boolean
++ alterarComprovacaoAtividade(cpf:String, senha:String, codigoAtividade:String, linkComprovacao:String):boolean
 --- 
  
  
@@ -64,30 +67,106 @@ composes AtividadeComplementarAbstract
 - senha: String 
 - matricula: String 
 - bonificacaoDicasFornecidas: int 
-- atividadesComplementares: List<AtividasdesComplementaresAbstract>
+- atividadesComplementares: List<AtividadesComplementaresAbstract>
+- historicoRelatorios: Map<LocalDate, Relatorio>
 --- 
 + Usuario(nome: String, cpf: String, senha: String, matricula: String) 
-+ getNome(): String 
++ getNome(): String
++ getCpf():String
 + setSenha(senhaAntiga: String, novaSenha: String): boolean 
 + verificaSenha(senha: String): boolean 
 + adicionaBonusElementos(bonusDoElemento:int): void
-+ adicionarAtividadeMonitoria(
++ adicionarAtividadeMonitoria(tempoContabilizado:int, disciplina:String):boolean
++ adicionarAtividadePesquisaExtensao(tempoContabilizado:int, subTipo:String):boolean
++ adicionarAtividadeEstagio(tempoContabilizado:int, nomeEmpresa:String):boolean
++ adicionarAtividadeRepresentacaoEstudantil(tempoContabilizado:int, subTipoCargo:String):boolean 
++ alterarDescricaoAtividade(codigoAtividade:String, descricao:String):boolean
++ alterarComprovacaoAtividade(codigoAtividade:String, linkComprovacao:String):boolean
++ geraMapaCreditos():String
 + verificarMetaAlcancada():boolean
 + toString(): String 
 + hashCode(): int 
-+ equals(obj: Object): boolean 
++ equals(obj: Object): boolean
 --- 
  
- 
- 
- 
+
+
+
+AtividadeComplementarAbstract
+---
+- descricao:String
+- codigo:String
+- linkDocumentacao:String
+- tempoContabilizado: int
+
+---
++ AtividadeComplementar(descricao:String, codigo:String, linkDocumentacao:String)
++ alteraDescricao(novaDescricao:String): boolean
++ alteraDocumentacao(novoLinkDocumentacao: String): boolean
++ calculaCreditos():int
+---
+
+
+
+PesquisaExtensao
+extends AtividadeComplementarAbstract
+---
+- subTipo:String
+- QTD_MAX_CREDITOS: int
+---
++ PesquisaExtensao(tempoContabilizado: int, subTipo:String)
++ calculaCreditos():int
++ toString():String
+---
+
+
+
+Monitoria
+extends AtividadeComplementarAbstract
+---
+- disciplinaMonitorada:String
+- QTD_MAX_CREDITOS: int
+---
++ Monitoria(tempoContabilizado: int, disciplina:String)
++ calculaCreditos():int
++ toString():String
+---
+
+
+
+
+Estagio
+extends AtividadeComplementarAbstract
+---
+- nomeDaEmpresa:String
+- QTD_MAX_CREDITOS: int
+---
++ Estagio(tempoContabilizado: int, nomeDaEmpresa:String)
++ calculaCreditos():int
++ toString():Stirng
+---
+
+
+RepresentacaoEstudantil
+extends AtividadeComplementarAbstract
+---
+- subTipoCargo:String
+- QTD_MAX_CREDITOS: int
+---
++ RepresentacaoEstudantil(tempoContabilizado: int, subTipoCargo:String)
++ calculaCreditos():int
++ toString():String
+---
+
+
+
  
 DicasController 
 composes Dica 
 --- 
 - dicasDisponiveis: List<Dica> 
 --- 
-+ adicionaDica(autor: Usuario, tema: String):boolean 
++ adicionaDica(autor: Usuario, tema: String):int 
 + listarDicas():String[] 
 + listarDicasDetalhes():String[] 
 + listarDica(posicao: int): String 
@@ -113,7 +192,6 @@ composes ElementoInterface
 + exibeDetalhes():String
 + toString():String
 - adicionaBonusAutor(qtdPontos:int):void
- 
 --- 
  
  
@@ -178,69 +256,52 @@ implements ElementoInterface
 
 
 
-AtividadeComplementarAbstract
+RelatorioController
+composes Relatorio
 ---
-- descricao:String
-- codigo:String
-- linkDocumentacao:String
-- unidadeContagem: int
-- qtdMaximaCreditos:int
-- creditosPorUnidade: int
+- estudante: Usuario
 ---
-+ AtividadeComplementar(tipo:String, descricao:String, codigo:String, linkDocumentacao:String)
-+ alteraDescricao(novaDescricao:String): boolean
-+ alteraDocumentacao(novoLinkDocumentacao: String): boolean
-+ calculaCreditos():int
-+ getQtdMaximaCreditosAbstract():int
-+ getCreditosPorUnidade():int
++ geraRelatorioFinal(estudante:Usuario):void
++ geraRelatorioFinalAtividade(estudante:Usuario):void
++ geraRelatorioParcial(estudante:Usuario)void
++ geraRelatorioParcialAtividade(estudante:Usuario):void
 ---
 
-PesquisaExtensao
-extends AtividadeComplementarAbstract
+
+Relatorio
 ---
-- subTipo:String
 ---
-+ PesquisaExtensao(tipo:String, descricao:String, codigo:String, linkDocumentacao:String, subTipo:String)
-+ getQtdMaximaCreditos():int
-+ getCreditosPorUnidade():int
-+ toString():Stirng
 ---
 
 
 
-Monitoria
-extends AtividadeComplementarAbstract
+Parcial
+extends Relatorio
 ---
-- disciplinaMonitorada:String
 ---
-+ Monitoria(tipo:String, descricao:String, codigo:String, linkDocumentacao:String,disciplinaMonitorada:String)
-+ getQtdMaximaCreditos():int
-+ getCreditosPorUnidade():int
-+ toString():String
 ---
 
 
 
-
-Estagio
-extends AtividadeComplementarAbstract
+ParcialPorAtividade
+extends Relatorio
 ---
-- nomeDaEmpresa:String
 ---
-+ Estagio(tipo:String, descricao:String, codigo:String,linkDocumentacao:String,nomeDaEmpresa:String)
-+ getQtdMaximaCreditos():int
-+ getCreditosPorUnidade():int
-+ toString():Stirng
 ---
 
 
-RepresentacaoEstudantil
-extends AtividadeComplementarAbstract
+
+Final
+extends Relatorio
 ---
-- subTipoCargo:String
 ---
-+ RepresentacaoEstudantil(tipo:String, descricao:String, codigo:String, linkDocumentacao:String,subTipoCargo:String)
-+ getQtdMaximaCreditos():int
-+ getCreditosPorUnidade():int
-+ toString():String
 ---
+
+
+
+FinalPorAtividade
+extends Relatorio
+---
+---
+---
+
