@@ -10,7 +10,7 @@ composes UsuarioController, DicasController
 + exibirEstudantes():String[] 
 + listarEstudantesRankingDicas():String[] 
  
-+ adicionaDica(autor: Usuario, tema: String):boolean 
++ adicionaDica(cpf:String, senha:String, tema: String):boolean 
 + listarDicas():String[] 
 + listarDicasDetalhes():String[] 
 + listarDica(posicao: int): String 
@@ -44,7 +44,11 @@ composes Usuario
 + validaSenha(cpf:String, senha:String):boolean
 + getUsuario(cpf:String): Usuario 
 + verificaRankingEstudantes():String[] 
-+ verificarMetaAlcancada(cpf:String, senha:String):boolean
++ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, unidadeDeTempo:int, disciplina:String):String
++ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, unidadeDeTempo:int, subTipo:String):String
++ criarAtividadeEstagioEstudante(cpf:String, senha:String, unidadeDeTempo:int, nomeEmpresa:String):String
++ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, unidadeDeTempo:int, subTipoCargo:String):String
++ verificarMetaAlcancadaCreditos(cpf:String, senha:String):boolean
 + gerarMapaCreditosAtividades():String
 --- 
  
@@ -60,13 +64,14 @@ composes AtividadeComplementarAbstract
 - senha: String 
 - matricula: String 
 - bonificacaoDicasFornecidas: int 
-- atividadesComplementares: List<AtividasdesComplementares>
+- atividadesComplementares: List<AtividasdesComplementaresAbstract>
 --- 
 + Usuario(nome: String, cpf: String, senha: String, matricula: String) 
 + getNome(): String 
 + setSenha(senhaAntiga: String, novaSenha: String): boolean 
 + verificaSenha(senha: String): boolean 
 + adicionaBonusElementos(bonusDoElemento:int): void
++ adicionarAtividadeMonitoria(
 + verificarMetaAlcancada():boolean
 + toString(): String 
 + hashCode(): int 
@@ -98,11 +103,10 @@ Dica
 composes ElementoInterface 
 --- 
 - autor: Usuario 
-- tema: String //pode ser que mude para um tipo Tema. 
+- tema: AtividadeComplementarAbstract
 - elementos: List<ElementoInterface> 
 --- 
-+ Dica(autor: Usuario, tema: String) 
-+ toString():String 
++ Dica(autor: Usuario, tema: String)  
 + adicionaElementoTexto(estudante:Usuario, texto:String): boolean 
 + adicionaElementoMultimidia(estudante:Usuario, link: String, cabecalho:String, tempo:int):boolean 
 + adicionaElementoReferencia(estudante:Usuario, titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int, conferida:boolean): boolean 
@@ -118,8 +122,7 @@ composes ElementoInterface
 ElementoInterface 
 --- 
 --- 
-- calculaValor(): int 
-+ exibePadrao(): void 
+- calculaValor(): int  
 + exibeDetalhado(): void 
 --- 
  
@@ -180,7 +183,7 @@ AtividadeComplementarAbstract
 - descricao:String
 - codigo:String
 - linkDocumentacao:String
-- unidadeTempo: int
+- unidadeContagem: int
 - qtdMaximaCreditos:int
 - creditosPorUnidade: int
 ---
