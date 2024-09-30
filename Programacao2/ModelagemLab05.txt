@@ -97,13 +97,12 @@ AtividadeComplementarAbstract
 - descricao:String
 - codigo:String
 - linkDocumentacao:String
-- tempoContabilizado: int
 
 ---
 + AtividadeComplementar(descricao:String, codigo:String, linkDocumentacao:String)
 + alteraDescricao(novaDescricao:String): boolean
 + alteraDocumentacao(novoLinkDocumentacao: String): boolean
-+ calculaCreditos():int
++ calculaCreditosAbstract():int
 ---
 
 
@@ -113,8 +112,10 @@ extends AtividadeComplementarAbstract
 ---
 - subTipo:String
 - QTD_MAX_CREDITOS: int
+- tempoContabilizado: int
+
 ---
-+ PesquisaExtensao(tempoContabilizado: int, subTipo:String)
++ PesquisaExtensao(descricao:String, codigo:String, linkDocumentacao:String, tempoContabilizado: int, subTipo:String)
 + calculaCreditos():int
 + toString():String
 ---
@@ -126,8 +127,10 @@ extends AtividadeComplementarAbstract
 ---
 - disciplinaMonitorada:String
 - QTD_MAX_CREDITOS: int
+- tempoContabilizado: int
+
 ---
-+ Monitoria(tempoContabilizado: int, disciplina:String)
++ Monitoria(descricao:String, codigo:String, linkDocumentacao:String, tempoContabilizado: int, disciplina:String)
 + calculaCreditos():int
 + toString():String
 ---
@@ -140,8 +143,10 @@ extends AtividadeComplementarAbstract
 ---
 - nomeDaEmpresa:String
 - QTD_MAX_CREDITOS: int
+- tempoContabilizado: int
+
 ---
-+ Estagio(tempoContabilizado: int, nomeDaEmpresa:String)
++ Estagio(descricao:String, codigo:String, linkDocumentacao:String, tempoContabilizado: int, nomeDaEmpresa:String)
 + calculaCreditos():int
 + toString():Stirng
 ---
@@ -152,8 +157,10 @@ extends AtividadeComplementarAbstract
 ---
 - subTipoCargo:String
 - QTD_MAX_CREDITOS: int
+- tempoContabilizado: int
+
 ---
-+ RepresentacaoEstudantil(tempoContabilizado: int, subTipoCargo:String)
++ RepresentacaoEstudantil(descricao:String, codigo:String, linkDocumentacao:String, tempoContabilizado: int, subTipoCargo:String)
 + calculaCreditos():int
 + toString():String
 ---
@@ -200,7 +207,7 @@ composes ElementoInterface
 ElementoInterface 
 --- 
 --- 
-- calculaValor(): int  
++ calculaValor(): int  
 + exibeDetalhado(): void 
 --- 
  
@@ -210,11 +217,10 @@ Texto
 implements ElementoInterface 
 --- 
 - texto: String 
-- valor: int 
 --- 
 + Texto(texto:String)
 + exibeDetalhado(): void 
-- calculaValor(): int 
++ calculaValor(): int 
 + toString(): String 
 --- 
  
@@ -226,11 +232,10 @@ implements ElementoInterface
 --- 
 - cabecalho: String 
 - link: String 
-- valor: int 
 --- 
 + Multimidia(cabecalho:String, link:String)
 + exibeDetalhado(): void 
-- calculaValor(): int 
++ calculaValor(): int 
 + toString(): String 
 --- 
  
@@ -248,7 +253,7 @@ implements ElementoInterface
 --- 
 + Referencia(referencias: List<String>, flagDeAcesso: boolean)
 + exibeDetalhado(): void 
-- calculaValor(): int 
++ calculaValor(): int 
 + toString(): String 
 ---
 
@@ -263,7 +268,7 @@ composes Relatorio
 ---
 + geraRelatorioFinal(estudante:Usuario):void
 + geraRelatorioFinalAtividade(estudante:Usuario):void
-+ geraRelatorioParcial(estudante:Usuario)void
++ geraRelatorioParcial(estudante:Usuario): void
 + geraRelatorioParcialAtividade(estudante:Usuario):void
 ---
 
@@ -304,4 +309,3 @@ extends Relatorio
 ---
 ---
 ---
-
