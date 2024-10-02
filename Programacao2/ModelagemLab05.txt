@@ -1,62 +1,71 @@
-// diagrama de classes de exemplo 
-// duas barras definem comentários 
- 
+
+
 FacadeComplementAcao 
-composes UsuarioController, DicasController 
---- 
+composes UsuarioController, DicasController, RelatorioController 
+---
+- usuarioController: UsuarioController
+- dicaController: DicasController
+- relatorioController: RelatorioController
 --- 
 + criarEstudante(nome: String, cpf: String, senha: String, matricula: String):boolean 
 + alterarSenhaEstudante(cpf:String, senhaAntiga: String, novaSenha: String): boolean 
 + exibirEstudantes():String[] 
-+ listarEstudantesRankingDicas():String[] 
- 
++ listarEstudantesRankingDicas():String[]  
 + adicionaDica(cpf:String, senha:String, tema: String):boolean 
 + listarDicas():String[] 
 + listarDicasDetalhes():String[] 
 + listarDica(posicao: int): String 
 + listarDicaDetalhes(posicao:int):String 
 + adicionaElementoTextoDica(cpf:String, senha:String, posicao:int, texto:String): boolean 
-+ adicionaElementoMultimidiaDica(posicao: int, link: String, cabecalho:String, tempo:int):boolean 
++ adicionaElementoMultimidiaDica(cpf:String, senha:String, posicao: int, link: String, cabecalho:String, tempo:int):boolean 
 + adicionaElementoReferencia(cpf:String, senha:String, posicao: int, titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int): boolean 
-
-
-+ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, tempoContabilizado:int, disciplina:String):String
-+ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, tempoContabilizado:int, subTipo:String):String
-+ criarAtividadeEstagioEstudante(cpf:String, senha:String, tempoContabilizado:int, nomeEmpresa:String):String
-+ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, tempoContabilizado:int, subTipoCargo:String):String
++ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, descricao:String, linkDocumentacao:String, tempoContabilizado:int, disciplina:String):String
++ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, descricao:String, linkDocumetacao:String, tempoContabilizado:int, subTipo:String):String
++ criarAtividadeEstagioEstudante(cpf:String, senha:String, descricao:String, linkDocumetacao:String, tempoContabilizado:int, nomeEmpresa:String):String
++ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String,descricao:String, linkDocumetacao:String, tempoContabilizado:int, subTipoCargo:String):String
 + verificarMetaAlcancada(cpf:String, senha:String):boolean
 + gerarMapaCreditosAtividades(cpf:String, senha:String):String
 + creditosAcumuladosAtividade(cpf: String, senha:String, tipoAtividade:String): int
 + alterarDescricaoAtividade(cpf:String, senha:String, codigoAtividade:String, descricao:String):boolean
 + alterarComprovacaoAtividade(cpf:String, senha:String, codigoAtividade:String, linkComprovacao:String):boolean
++ gerarRelatorioFinal(cpf:String, senha:String): String
++ gerarRelatorioFinalPorAtividade(cpf:String, senha:String, tipo:String):String
++ gerarRelatorioParcial(cpf:String, senha:String, salvar: boolean):String
++ gerarRelatorioParcialPorAtividade(cpf:String, senha:String, tipo:String, salvar: boolean):String
++ listarHistorico(cpf:String, senha:String):String
++ excluirItemHistorico(cpf:String, senha:String, data:String):boolean
 --- 
  
- 
- 
+  
  
 UsuarioController  
 composes Usuario 
 --- 
 - usuarios: HashMap<String,Usuario> 
 --- 
++ UsuarioController()
 + adicionaEstudante(nome: String, cpf: String, senha: String, matricula: String):boolean 
 + alterarSenhaEstudante(cpf:String, senhaAntiga: String, novaSenha: String): boolean 
 + exibirEstudantes():String[] 
-+ validaSenha(cpf:String, senha:String):boolean
++ validaSenhaComUsuario(cpf:String, senha:String):boolean
 + getUsuario(cpf:String): Usuario 
 + verificaRankingEstudantes():String[] 
-+ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, tempoContabilizado:int, disciplina:String):String
-+ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, tempoContabilizado:int, subTipo:String):String
-+ criarAtividadeEstagioEstudante(cpf:String, senha:String, tempoContabilizado:int, nomeEmpresa:String):String
-+ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, tempoContabilizado:int, subTipoCargo:String):String
++ criarAtividadeMonitoriaEstudante(cpf:String, senha:String, descricao: String, linkDocumentacao:String, tempoContabilizado:int, disciplina:String):String
++ criarAtividadePesquisaExtensaoEstudante(cpf:String, senha:String, descricao: String, linkDocumentacao:String, tempoContabilizado:int, subTipo:String):String
++ criarAtividadeEstagioEstudante(cpf:String, senha:String, descricao: String, linkDocumentacao:String, tempoContabilizado:int, nomeEmpresa:String):String
++ criarAtividadeRepresentacaoEstudantil(cpf:String, senha:String, descricao: String, linkDocumentacao:String, tempoContabilizado:int, subTipoCargo:String):String
 + verificarMetaAlcancadaCreditos(cpf:String, senha:String):boolean
 + gerarMapaCreditosAtividades(cpf:String, senha:String):String
++ verificarCreditosPorAtividade(cpf:String, senha:String, tipo:String): int
 + alterarDescricaoAtividade(cpf:String, senha:String, codigoAtividade:String, descricao:String):boolean
 + alterarComprovacaoAtividade(cpf:String, senha:String, codigoAtividade:String, linkComprovacao:String):boolean
---- 
- 
- 
- 
++ gerarRelatorioFinal(cpf:String, senha:String): String
++ gerarRelatorioFinalPorAtividade(cpf:String, senha:String, tipo:String):String
++ gerarRelatorioParcial(cpf:String, senha:String, salvar: boolean):String
++ gerarRelatorioParcialPorAtividade(cpf:String, senha:String, tipo:String, salvar: boolean):String
++ listarHistorico(cpf:String, senha:String):String
++ excluirItemHistorico(cpf:String, senha:String, data:String):boolean
+---  
  
  
 Usuario
@@ -67,46 +76,54 @@ composes AtividadeComplementarAbstract
 - senha: String 
 - matricula: String 
 - bonificacaoDicasFornecidas: int 
+- creditosAcumulados: int
 - atividadesComplementares: List<AtividadesComplementaresAbstract>
-- historicoRelatorios: Map<LocalDate, Relatorio>
+- historicoRelatorios: Map<LocalDate, String>
 --- 
 + Usuario(nome: String, cpf: String, senha: String, matricula: String) 
 + getNome(): String
 + getCpf():String
++ getCreditosAcumulados():int
 + setSenha(senhaAntiga: String, novaSenha: String): boolean 
 + verificaSenha(senha: String): boolean 
 + adicionaBonusElementos(bonusDoElemento:int): void
-+ adicionarAtividadeMonitoria(tempoContabilizado:int, disciplina:String):boolean
-+ adicionarAtividadePesquisaExtensao(tempoContabilizado:int, subTipo:String):boolean
-+ adicionarAtividadeEstagio(tempoContabilizado:int, nomeEmpresa:String):boolean
-+ adicionarAtividadeRepresentacaoEstudantil(tempoContabilizado:int, subTipoCargo:String):boolean 
++ getBonificacaoDicasFornecidas():int
++ adicionarAtividadeMonitoria(descricao:String, linkDocumentacao:String, tempoContabilizado:int, disciplina:String):boolean
++ adicionarAtividadePesquisaExtensao(descricao:String, linkDocumentacao:String, tempoContabilizado:int, subTipo:String):boolean
++ adicionarAtividadeEstagio(descricao:String, linkDocumentacao:String, tempoContabilizado:int, nomeEmpresa:String):boolean
++ adicionarAtividadeRepresentacaoEstudantil(descricao:String, linkDocumentacao:String, tempoContabilizado:int, subTipoCargo:String):boolean 
 + alterarDescricaoAtividade(codigoAtividade:String, descricao:String):boolean
 + alterarComprovacaoAtividade(codigoAtividade:String, linkComprovacao:String):boolean
+- geraCodigoAtividade():String
 + geraMapaCreditos():String
+- calculaCreditosAtividades(): Map
++ verificaCreditosTipoDeAtividade(String tipo):int
 + verificarMetaAlcancada():boolean
++ adicionaRelatorioNoHistorico(relatorioGerado:String): void
++ listaRelatorios():String[]
++ excluiItemHistorico(data: String): boolean
 + toString(): String 
 + hashCode(): int 
 + equals(obj: Object): boolean
 --- 
- 
-
-
+  
 
 AtividadeComplementarAbstract
 ---
 - descricao:String
 - codigo:String
 - linkDocumentacao:String
-
 ---
 + AtividadeComplementar(descricao:String, codigo:String, linkDocumentacao:String)
 + alteraDescricao(novaDescricao:String): boolean
 + alteraDocumentacao(novoLinkDocumentacao: String): boolean
 + calculaCreditosAbstract():int
++ getCodigo():int
++ equals(o:Object):boolean
++ hashCode():int
 ---
 
-
-
+ 
 PesquisaExtensao
 extends AtividadeComplementarAbstract
 ---
@@ -117,9 +134,9 @@ extends AtividadeComplementarAbstract
 ---
 + PesquisaExtensao(descricao:String, codigo:String, linkDocumentacao:String, tempoContabilizado: int, subTipo:String)
 + calculaCreditos():int
++ getQtdMaxCreditos():int
 + toString():String
 ---
-
 
 
 Monitoria
@@ -132,10 +149,9 @@ extends AtividadeComplementarAbstract
 ---
 + Monitoria(descricao:String, codigo:String, linkDocumentacao:String, tempoContabilizado: int, disciplina:String)
 + calculaCreditos():int
++ getQtdMaxCreditos():int
 + toString():String
 ---
-
-
 
 
 Estagio
@@ -148,6 +164,7 @@ extends AtividadeComplementarAbstract
 ---
 + Estagio(descricao:String, codigo:String, linkDocumentacao:String, tempoContabilizado: int, nomeDaEmpresa:String)
 + calculaCreditos():int
++ getQtdMaxCreditos():int
 + toString():Stirng
 ---
 
@@ -162,11 +179,10 @@ extends AtividadeComplementarAbstract
 ---
 + RepresentacaoEstudantil(descricao:String, codigo:String, linkDocumentacao:String, tempoContabilizado: int, subTipoCargo:String)
 + calculaCreditos():int
++ getQtdMaxCreditos():int
 + toString():String
 ---
-
-
-
+ 
  
 DicasController 
 composes Dica 
@@ -178,11 +194,10 @@ composes Dica
 + listarDicasDetalhes():String[] 
 + listarDica(posicao: int): String 
 + listarDicaDetalhes(posicao:int):String 
-+ adicionaElementoTextoDica(estudante:Usuario, senha:String,posicao:int, texto:String): boolean 
++ adicionaElementoTextoDica(estudante:Usuario, posicao:int, texto:String): boolean 
 + adicionaElementoMultimidiaDica(estudante:Usuario, posicao: int, link: String, cabecalho:String, tempo:int):boolean 
 + adicionaElementoReferencia(estudante:Usuario, posicao: int, titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int): boolean 
 --- 
- 
  
  
 Dica 
@@ -193,24 +208,23 @@ composes ElementoInterface
 - elementos: List<ElementoInterface> 
 --- 
 + Dica(autor: Usuario, tema: String)  
-+ adicionaElementoTexto(estudante:Usuario, texto:String): boolean 
-+ adicionaElementoMultimidia(estudante:Usuario, link: String, cabecalho:String, tempo:int):boolean 
-+ adicionaElementoReferencia(estudante:Usuario, titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int, conferida:boolean): boolean 
++ adicionaElementoTexto(texto:String): boolean 
++ adicionaElementoMultimidia(link: String, cabecalho:String, tempo:int):boolean 
++ adicionaElementoReferencia(titulo:String, fonte:String, ano:int, conferida:boolean, importancia:int, conferida:boolean): boolean 
++ ehAutor(estudante: Usuario):boolean
 + exibeDetalhes():String
 + toString():String
 - adicionaBonusAutor(qtdPontos:int):void
---- 
- 
- 
+---
  
  
 ElementoInterface 
 --- 
 --- 
 + calculaValor(): int  
++ exibe():String
 + exibeDetalhado(): void 
 --- 
- 
  
  
 Texto 
@@ -221,10 +235,8 @@ implements ElementoInterface
 + Texto(texto:String)
 + exibeDetalhado(): void 
 + calculaValor(): int 
-+ toString(): String 
++ exibe():String 
 --- 
- 
- 
  
  
 Multimidia 
@@ -232,14 +244,13 @@ implements ElementoInterface
 --- 
 - cabecalho: String 
 - link: String 
+- duracao: int
 --- 
 + Multimidia(cabecalho:String, link:String)
 + exibeDetalhado(): void 
 + calculaValor(): int 
-+ toString(): String 
++ exibe():String 
 --- 
- 
- 
  
  
 Referencia 
@@ -252,60 +263,66 @@ implements ElementoInterface
 - ordemDeImportancia: int 
 --- 
 + Referencia(referencias: List<String>, flagDeAcesso: boolean)
+- foiConferida():String
 + exibeDetalhado(): void 
 + calculaValor(): int 
-+ toString(): String 
++ exibe():String 
 ---
-
-
 
 
 
 RelatorioController
 composes Relatorio
 ---
-- estudante: Usuario
+- relatorio: Relatorio
 ---
++ RelatorioController()
 + geraRelatorioFinal(estudante:Usuario):void
-+ geraRelatorioFinalAtividade(estudante:Usuario):void
-+ geraRelatorioParcial(estudante:Usuario): void
-+ geraRelatorioParcialAtividade(estudante:Usuario):void
++ geraRelatorioFinalAtividade(estudante:Usuario, tipoAtividade:String):void
++ geraRelatorioParcial(estudante:Usuario, salvar:boolean): void
++ geraRelatorioParcialAtividade(estudante:Usuario, tipoAtividade:String, salvar:boolean):void
 ---
 
 
-Relatorio
+RelatorioInterface
 ---
 ---
++ geraRelatorio(estudante:Usuario): String
 ---
-
-
+ 
 
 Parcial
-extends Relatorio
+implements RelatorioInterface
 ---
 ---
++ Parcial()
++ geraRelatorio(estudante:Usuario): String
 ---
-
-
 
 ParcialPorAtividade
-extends Relatorio
+implements RelatorioInterface
 ---
+- tipoAtividade:String
 ---
++ ParcialPorAtividade(tipo:String)
++ geraRelatorio(estudante:Usuario): String
+- getCreditosMaximosPorTipo(estudante:Usuario, tipo: String):int
 ---
-
-
 
 Final
-extends Relatorio
+implements RelatorioInterface
 ---
 ---
----
-
-
++ Final()
++ geraRelatorio(estudante:Usuario): String
+--- 
 
 FinalPorAtividade
-extends Relatorio
+implements RelatorioInterface
 ---
+- tipoAtividade:String
 ---
++ FinalPorAtividade()
++ geraRelatorio(estudante:Usuario): String
+- getCreditosMaximosPorTipo(estudante:Usuario, tipo: String):int
 ---
